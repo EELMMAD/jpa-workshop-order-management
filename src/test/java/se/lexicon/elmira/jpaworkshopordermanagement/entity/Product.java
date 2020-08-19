@@ -1,11 +1,11 @@
 package se.lexicon.elmira.jpaworkshopordermanagement.entity;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Product {
     private int id;
     private String name;
+    //Create as a BigDecimal?
     private double price;
 
     public Product() {
