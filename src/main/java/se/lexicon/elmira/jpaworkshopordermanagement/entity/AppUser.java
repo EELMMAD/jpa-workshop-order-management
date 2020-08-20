@@ -1,8 +1,16 @@
 package se.lexicon.elmira.jpaworkshopordermanagement.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Objects;
 
+@Entity
 public class AppUser {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String firstName;
     private String lastName;
@@ -18,6 +26,7 @@ public class AppUser {
         setEmail(email);
     }
 
+    @Id
     public int getId() {
         return id;
     }
