@@ -1,11 +1,29 @@
 package se.lexicon.elmira.jpaworkshopordermanagement.entity;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
 public class OrderItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private int quantity;
+
+    @ManyToOne(
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            fetch = FetchType.EAGER
+    )
+
     private Product product;
+
+
+    @ManyToOne(
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            fetch = FetchType.LAZY
+    )
     private ProductOrder productOrder;
 
     public OrderItem() {
