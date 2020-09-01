@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
 @Entity
 public class ProductOrder {
 
@@ -16,24 +15,27 @@ public class ProductOrder {
 
     private LocalDateTime orderDateTime;
 
-
     @OneToMany(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.LAZY,
             orphanRemoval = true
-            )
-
+    )
     private List<OrderItem> orderItems;
-
 
     @ManyToOne(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.EAGER
-
     )
     private AppUser customer;
 
     public ProductOrder() {
+    }
+
+    public ProductOrder(int id, LocalDateTime orderDateTime, List<OrderItem> orderItems, AppUser customer) {
+        this.id = id;
+        this.orderDateTime = orderDateTime;
+        this.orderItems = orderItems;
+        this.customer = customer;
     }
 
     public ProductOrder(LocalDateTime orderDateTime, List<OrderItem> orderItems, AppUser customer) {
@@ -42,17 +44,18 @@ public class ProductOrder {
         this.customer = customer;
     }
 
-    public boolean addOrderItem(OrderItem orderItem) {
 
-        if (orderItems == null) {
+    public boolean addOrderItem(OrderItem orderItem){
+
+        if (orderItems == null){
             orderItems = new ArrayList<>();
         }
 
-        if (orderItem == null) {
+        if (orderItem == null){
             throw new IllegalArgumentException("OrderItem was null - Not Allowed to send in Null");
         }
 
-        if (!orderItems.contains(orderItem)) {
+        if(!orderItems.contains(orderItem)) {
             this.orderItems.add(orderItem);
             orderItem.setProductOrder(this);
             return true;
@@ -60,29 +63,31 @@ public class ProductOrder {
         return false;
     }
 
-    public boolean removeOrderItems(OrderItem orderItem) {
+    public boolean removeOrderItem(OrderItem orderItem){
 
-        if (orderItems == null) {
+        if (orderItems == null){
             orderItems = new ArrayList<>();
         }
 
-        if (orderItem == null) {
+        if (orderItem == null){
             throw new IllegalArgumentException("OrderItem was null - Not Allowed to send in Null");
         }
 
-        if(orderItems.contains(orderItem)){
+        if (orderItems.contains(orderItem)) {
             orderItem.setProductOrder(null);
             orderItems.remove(orderItem);
             return true;
         }
+
         return false;
     }
+
 
     public double calculateOrderPrice(){
 
         double amount = 0;
 
-        for(OrderItem content : orderItems){
+        for (OrderItem content : orderItems) {
             amount += content.calculateProducts();
         }
         return amount;
@@ -122,13 +127,13 @@ public class ProductOrder {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductOrder that = (ProductOrder) o;
-        return getId() == that.getId() &&
-                Objects.equals(getOrderDateTime(), that.getOrderDateTime());
+        return id == that.id &&
+                Objects.equals(orderDateTime, that.orderDateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getOrderDateTime());
+        return Objects.hash(id, orderDateTime);
     }
 
     @Override
